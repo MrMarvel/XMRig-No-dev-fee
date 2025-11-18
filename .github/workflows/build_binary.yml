@@ -43,5 +43,5 @@ jobs:
       run: |
         mkdir xmrig\build && cd xmrig\build
         ls && pwd
-        cd xmrig\build && cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
-        cd xmrig\build && cmake --build . --config Release
+        cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
+        cmake --build . --config Release
