@@ -39,14 +39,9 @@ jobs:
         repository: xmrig/xmrig-deps
         path: deps # $GITHUB_WORKSPACE/deps
 
-    - name: Cmd1
-      run: mkdir xmrig\build && cd xmrig\build
-
-    - name: Cmd1Test
-      run: ls && pwd
-      
-    - name: Cmd2
-      run: cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
-      
-    - name: Cmd3
-      run: cmake --build . --config Release
+    - name: Commands to build
+      run: |
+        mkdir xmrig\build && cd xmrig\build
+        ls && pwd
+        cd xmrig\build && cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
+        cd xmrig\build && cmake --build . --config Release
