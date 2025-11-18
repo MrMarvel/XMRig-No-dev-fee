@@ -36,7 +36,7 @@ jobs:
     - name: Get dependencies
       uses: actions/checkout@v4
       with:
-        repository: git@github.com:xmrig/xmrig-deps.git
+        repository: xmrig/xmrig-deps
         path: deps # $GITHUB_WORKSPACE/deps
 
     - name: Cmd1
