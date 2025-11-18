@@ -43,7 +43,7 @@ jobs:
       run: |
         Set-PSDebug -Trace 1
         ls && pwd
-        mkdir xmrig\build && cd xmrig\build
+        mkdir build && cd build
         ls && pwd
         cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
         cmake --build . --config Release
