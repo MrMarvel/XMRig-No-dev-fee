@@ -41,7 +41,7 @@ jobs:
 
     - name: Commands to build
       run: |
-        @echo on
+        Set-PSDebug -Trace 1
         ls && pwd
         mkdir xmrig\build && cd xmrig\build
         ls && pwd
