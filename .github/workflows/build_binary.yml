@@ -1,0 +1,49 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: MSBuild
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+      
+    - uses: actions/checkout@v4
+
+    - name: Get dependencies
+      uses: actions/checkout@v4
+      with:
+        repository: git@github.com:xmrig/xmrig-deps.git
+        path: deps # $GITHUB_WORKSPACE/deps
+
+    - name: Cmd1
+      run: mkdir xmrig\build && cd xmrig\build
+      
+    - name: Cmd2
+      run: cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
+      
+    - name: Cmd3
+      run: cmake --build . --config Release
