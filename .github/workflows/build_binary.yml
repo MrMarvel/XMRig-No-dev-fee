@@ -41,6 +41,8 @@ jobs:
 
     - name: Commands to build
       run: |
+        @echo on
+        ls && pwd
         mkdir xmrig\build && cd xmrig\build
         ls && pwd
         cmake .. -G "Visual Studio 17 2022" -A x64 -DXMRIG_DEPS=$GITHUB_WORKSPACE/deps/msvc2022/x64
