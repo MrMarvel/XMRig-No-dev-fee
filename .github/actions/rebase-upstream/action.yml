@@ -37,9 +37,6 @@ runs:
         if [ ! $(echo $UPSTREAM | egrep '^(http|git@)') ]; then
             UPSTREAM=https://github.com/$UPSTREAM.git
         fi;
-        if [ ${{ inputs.depth }} -ne 0 ]; then
-            DEPTH=--depth=${{ inputs.depth }}
-        fi;
 
         git remote add upstream $UPSTREAM;
 
