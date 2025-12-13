@@ -1,0 +1,59 @@
+name: rebase-upstream
+author: Sergey
+description: rebase-upstream
+inputs:
+  upstream:
+    description: <user>/<repo> or the full HTTP URL
+    required: false
+  branch:
+    description: The upstream branch that is rebased on
+    required: false
+    default: master
+  push:
+    description: Do the force push in this action
+    required: false
+    default: 'true'
+  strategy-option:
+    description: Git rebase strategy option (ours or theirs)
+    required: false
+    default: 'ours'
+  token:
+    description: GitHub token to access to API and git
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: composite
+  steps:
+    - run: |
+        set -ex;
+
+        UPSTREAM=${{ inputs.upstream }};
+        GITHUB_TOKEN=${{ inputs.token }};
+        if [ -z $UPSTREAM ]; then
+            echo $GITHUB_TOKEN | gh auth login --with-token;
+            UPSTREAM=$(gh api repos/:owner/:repo --jq .parent.full_name);
+            if [ -z $UPSTREAM ]; then echo "Can't find upstream" >&2 && exit 1; fi;
+        fi;
+        if [ ! $(echo $UPSTREAM | egrep '^(http|git@)') ]; then
+            UPSTREAM=https://github.com/$UPSTREAM.git
+        fi;
+        if [ ${{ inputs.depth }} -ne 0 ]; then
+            DEPTH=--depth=${{ inputs.depth }}
+        fi;
+
+        git remote add upstream $UPSTREAM;
+
+        git fetch upstream ${{ inputs.branch }} $DEPTH;
+
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com";
+        git config --local user.name  "GitHub Actions";
+
+        git rebase upstream/${{ inputs.branch }} --strategy-option=${{ inputs.strategy-option }};
+
+        if [ "${{ inputs.push }}" = "true" -a "$(git status | grep diverged)" ]; then
+            ORIGIN_URL=$(git remote get-url origin);
+            git remote set-url origin "${ORIGIN_URL/https:\/\//https:\/\/$GITHUB_TOKEN@}"
+            git fetch origin $(git branch --show-current)
+            git push origin $(git branch --show-current) --force-with-lease;
+        fi;
+      shell: bash
