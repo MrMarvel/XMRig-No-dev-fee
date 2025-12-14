@@ -40,7 +40,8 @@ runs:
 
         git remote add upstream $UPSTREAM;
 
-        git fetch upstream ${{ inputs.branch }} $DEPTH;
+        git fetch origin $(git branch --show-current) --depth=100;
+        git fetch upstream ${{ inputs.branch }} --depth=100;
 
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com";
         git config --local user.name  "GitHub Actions";
