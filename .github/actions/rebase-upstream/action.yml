@@ -45,7 +45,7 @@ runs:
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com";
         git config --local user.name  "GitHub Actions";
 
-        git rebase upstream/${{ inputs.branch }} --strategy-option=${{ inputs.strategy-option }};
+        git rebase --strategy-option=${{ inputs.strategy-option }} upstream/${{ inputs.branch }} ;
 
         if [ "${{ inputs.push }}" = "true" -a "$(git status | grep diverged)" ]; then
             ORIGIN_URL=$(git remote get-url origin);
