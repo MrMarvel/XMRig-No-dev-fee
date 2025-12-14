@@ -14,7 +14,8 @@ jobs:
       - uses: ./.github/actions/rebase-upstream
         with:
           upstream: xmrig/xmrig
-          branch: master
+          branch-remote-base: master
+          branch-to-update: master
           branch-feature: dev
         # with:  # all args are optional
         #   upstream: <user>/<repo>

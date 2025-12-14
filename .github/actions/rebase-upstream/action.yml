@@ -5,14 +5,18 @@ inputs:
   upstream:
     description: <user>/<repo> or the full HTTP URL
     required: false
-  branch:
+  branch-remote-base:
     description: The upstream branch that is rebased on
+    required: false
+    default: master
+  branch-to-update:
+    description: The branch to save result of rebase (usually same as feature branch)
     required: false
     default: master
   branch-feature:
     description: The feature branch to rebase
     required: false
-    default: dev
+    default: master
   push:
     description: Do the force push in this action
     required: false
@@ -41,16 +45,16 @@ runs:
         if [ ! $(echo $UPSTREAM | egrep '^(http|git@)') ]; then
             UPSTREAM=https://github.com/$UPSTREAM.git
         fi;
-        git checkout ${{ inputs.branch }};
+        git checkout ${{ inputs.branch-to-update }};
         git reset --hard origin/${{ inputs.branch-feature }};
         git remote add upstream $UPSTREAM;
         
-        git fetch upstream ${{ inputs.branch }};
+        git fetch upstream ${{ inputs.branch-remote-base }};
 
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com";
         git config --local user.name  "GitHub Actions";
 
-        git rebase --strategy-option=${{ inputs.strategy-option }} upstream/${{ inputs.branch }} ;
+        git rebase --strategy-option=${{ inputs.strategy-option }} upstream/${{ inputs.branch-remote-base }} ;
 
         if [ "${{ inputs.push }}" = "true" -a "$(git status | grep diverged)" ]; then
             ORIGIN_URL=$(git remote get-url origin);
