@@ -9,6 +9,10 @@ inputs:
     description: The upstream branch that is rebased on
     required: false
     default: master
+  branch-feature:
+    description: The feature branch to rebase
+    required: false
+    default: dev
   push:
     description: Do the force push in this action
     required: false
@@ -16,7 +20,7 @@ inputs:
   strategy-option:
     description: Git rebase strategy option (ours or theirs)
     required: false
-    default: 'ours'
+    default: ours
   token:
     description: GitHub token to access to API and git
     required: false
