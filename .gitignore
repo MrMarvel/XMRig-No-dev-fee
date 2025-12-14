@@ -1,3 +1,4 @@
+deps/
 /build
 scripts/build
 scripts/deps
