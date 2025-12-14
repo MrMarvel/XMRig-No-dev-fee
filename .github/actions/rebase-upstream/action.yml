@@ -41,9 +41,9 @@ runs:
         if [ ! $(echo $UPSTREAM | egrep '^(http|git@)') ]; then
             UPSTREAM=https://github.com/$UPSTREAM.git
         fi;
-
+        git checkout ${{ inputs.branch-feature }};
         git remote add upstream $UPSTREAM;
-
+        
         git fetch upstream ${{ inputs.branch }};
 
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com";
