@@ -54,7 +54,7 @@ jobs:
           cmake --build . --config Release
         # Result in "build\Release\xmrig.exe"
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: xmrig-binary
           path: ${{github.workspace}}/build/Release/xmrig.exe
