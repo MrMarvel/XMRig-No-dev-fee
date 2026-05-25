@@ -152,20 +152,6 @@ void JitCompilerA64::generateProgram(Program& program, ProgramConfiguration& con
 		(this->*engine[instr.opcode])(instr, codePos);
 	}
 
-	{
-		const uint32_t rr2Off = reg_changed_offset[config.readReg2];
-		const uint32_t rr3Off = reg_changed_offset[config.readReg3];
-		const uint32_t maxOff = (rr2Off > rr3Off) ? rr2Off : rr3Off;
-		if (codePos - maxOff > 40 * 4) {
-			const uint32_t datasetMask = ((RandomX_CurrentConfig.Log2_DatasetBaseSize - 7) << 10);
-			emit32(ARMV8A::EOR32 | 20 | (IntRegMap[config.readReg2] << 5) | (IntRegMap[config.readReg3] << 16), code, codePos);
-			emit32(ARMV8A::EOR32 | 19 | (9 << 5) | (20 << 16), code, codePos);
-			emit32(0x121A0000 | 19 | (19 << 5) | datasetMask, code, codePos);
-			emit32(ARMV8A::ADD | 19 | (19 << 5) | (1 << 16), code, codePos);
-			emit32(0xF9800000 | 3 | (19 << 5), code, codePos);
-		}
-	}
-
 	// Update spMix2
 	// eor w20, config.readReg2, config.readReg3
 	emit32(ARMV8A::EOR32 | 20 | (IntRegMap[config.readReg2] << 5) | (IntRegMap[config.readReg3] << 16), code, codePos);
